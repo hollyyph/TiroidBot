@@ -1,6 +1,7 @@
 import telebot
 # import mysql.connector
-# import deep learning module
+import pickle
+import joblib
 
 # mydb = mysql.connector.connect(
 #     host='localhost',
@@ -8,11 +9,17 @@ import telebot
 #     passwd='',
 #     database='data_satu')
 
-
 # #cek akses database
 # print(mydb)
 
-#input ke SQL
+# load the model from disk
+filename = 'model_nb.sav'
+filename_vec = 'vectorizer.sav'
+loaded_model = pickle.load(open(filename, 'rb'))
+print("Model Loaded")
+loaded_vec = pickle.load(open(filename_vec, 'rb'))
+print("Vectorizer Loaded")
+
 api = '5181979829:AAEueTTI3--iCXqnS401FJ1vVaCizkR74M0'
 bot = telebot.TeleBot(api)
 
@@ -40,8 +47,8 @@ def action_help(message):
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
 Hi {} {}, ini list command yaa
-/start -> Sapa Bot dulu Gan
-/id -> Cek id Kamu
+/start -> Mulai
+/id -> Cek id 
 /help -> List Command Bot
 /ask -> Bertanya
 '''.format(first_name,last_name))
@@ -49,6 +56,7 @@ Hi {} {}, ini list command yaa
 @bot.message_handler(commands=['ask'])
 def action_ask(message):
     
+    # ganti akses db
     answer = {
     "1": "Jawaban 1 ayayayaya",
     "2": "Jawaban 2 iyiyiyiy",
@@ -63,8 +71,9 @@ def action_ask(message):
     question_str = ' '
     question_str = question_str.join(question)
     id_ask = len(question)
-    # ngerun modelnya berdasarkan question str
-    # id_ask = model(question_str)
+    question_vec = loaded_vec.transform([question_str])
+    pred = loaded_model.predict(question_vec)
+    id_ask = pred[0]
     bot.send_message(message.chat.id, answer[str(id_ask)])
 
 
