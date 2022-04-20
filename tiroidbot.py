@@ -1,16 +1,15 @@
 import telebot
-# import mysql.connector
+import pymongo
 import pickle
 import joblib
+from pprint import pprint
 
-# mydb = mysql.connector.connect(
-#     host='localhost',
-#     user='root',
-#     passwd='',
-#     database='data_satu')
-
-# #cek akses database
-# print(mydb)
+# Connect to mongoDB
+MONGODB_URI = "mongodb+srv://holly:if5172@tiroidcluster.qzzri.mongodb.net/tiroidDB?retryWrites=true&w=majority"
+client = pymongo.MongoClient(MONGODB_URI) 
+db = client['tiroidDB']
+print("Database loaded")
+answers = db['answers']
 
 # load the model from disk
 filename = 'model_nb.sav'
@@ -27,7 +26,11 @@ bot = telebot.TeleBot(api)
 def action_start(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
-    bot.send_message(message.chat.id, "Hi  apa kabar {} {}? Silahkan tanya mengenai informasi penyakit Grave's dengan menggunakan format \"/ask <pertanyaan>\"".format(first_name, last_name))
+    bot.send_message(message.chat.id, '''
+Hi apa kabar {} {}? <Nama bot yg bagus> siap menjawab pertanyaanmu mengenai Grave's Disease. 
+Silahkan tanya mengenai informasi penyakit Grave's dengan menggunakan format \"/ask <pertanyaan>\"
+'''.format(first_name, last_name))
+
     print(message)
 
 @bot.message_handler(commands=['id'])
@@ -36,28 +39,29 @@ def action_id(message):
     last_name = message.chat.last_name
     id_telegram = message.chat.id
     bot.send_message(message.chat.id, '''
-Hai, ini ID Telegram kamu
-Nama = {} {} 
-ID = {}
-        '''.format(first_name,last_name, id_telegram))
+ID Telegram = {}
+        '''.format(id_telegram))
 
 @bot.message_handler(commands=['help'])
 def action_help(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
-Hi {} {}, ini list command yaa
-/start -> Mulai
-/id -> Cek id 
-/help -> List Command Bot
-/ask -> Bertanya
+Halo {} {} 👋
+Berikut adalah list command yang dapat dilakukan
+/start → Mulai menggunakan Bot
+/help → Melihat kembali list command Bot
+/ask → Ketik langsung pertanyaan dengan memisahkan /ask dan pertanyaan dengan spasi
+
+Contoh: 
+/ask Apa itu Grave's Disease
 '''.format(first_name,last_name))
 
 @bot.message_handler(commands=['ask'])
 def action_ask(message):
     
     # ganti akses db
-    answer = {
+    answer_sample = {
     "0": "Jawaban 0 ayayayaya",
     "1": "Jawaban 1 ayayayaya",
     "2": "Jawaban 2 iyiyiyiy",
@@ -65,22 +69,31 @@ def action_ask(message):
     "4": "Jawaban 4 hohohohoh",
     "5": "Jawaban 5 lolololol",
     "6": "Jawaban 6 lalalalala"
-    }
-
+}
     texts = message.text.split(' ')
+
+    # Convert question
     question = texts[1:len(texts)]
     question_str = ' '
     question_str = question_str.join(question)
-    id_ask = len(question)
+
+    # Predict answer based on question
     question_vec = loaded_vec.transform([question_str])
     pred = loaded_model.predict(question_vec)
-    id_ask = pred[0]
-    bot.send_message(message.chat.id, answer[str(id_ask)])
+    pred_category = float(pred[0])
 
+    # Access DB to get answer string based on category
+    answers_str = answers.find_one({'category': pred_category})['answer']
+    answers_images = answers.find_one({'category': pred_category})['images']
+    
+    # Send answer strings
+    for ans in answers_str:
+        bot.send_message(message.chat.id, ans)
+    # Send answer images
+    for image_url in answers_images:
+        bot.send_photo(message.chat.id, image_url)
 
-print('bot start running')
-
-# question = command.split(' ')
+print('tiroidbot start running')
 
 bot.polling()
 
