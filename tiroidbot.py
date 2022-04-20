@@ -27,7 +27,7 @@ bot = telebot.TeleBot(api)
 def action_start(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
-    bot.send_message(message.chat.id, 'Hi, apa kabar {} {}?'.format(first_name, last_name))
+    bot.send_message(message.chat.id, "Hi  apa kabar {} {}? Silahkan tanya mengenai informasi penyakit Grave's dengan menggunakan format \"/ask <pertanyaan>\"".format(first_name, last_name))
     print(message)
 
 @bot.message_handler(commands=['id'])
@@ -58,6 +58,7 @@ def action_ask(message):
     
     # ganti akses db
     answer = {
+    "0": "Jawaban 0 ayayayaya",
     "1": "Jawaban 1 ayayayaya",
     "2": "Jawaban 2 iyiyiyiy",
     "3": "Jawaban 3 uwuwuwuwu",
