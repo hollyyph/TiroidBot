@@ -1,5 +1,4 @@
 telebot
 pymongo
-pickle
 joblib
 pprint
