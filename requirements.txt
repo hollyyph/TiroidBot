@@ -1,3 +1,4 @@
+sklearn
 telebot
 pymongo[srv]
 joblib
