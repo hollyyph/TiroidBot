@@ -1,4 +1,4 @@
 sklearn
-telebot
+telebot==0.0.4
 pymongo[srv]
 joblib
