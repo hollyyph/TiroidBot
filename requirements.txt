@@ -1,4 +1,4 @@
 sklearn
-PyTelegramBotAPI==2.2.3
+PyTelegramBotAPI
 pymongo[srv]
 joblib
