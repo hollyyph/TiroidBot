@@ -12,7 +12,7 @@ print("Database loaded")
 answers = db['answers']
 
 # load the model from disk
-filename = 'model_nb.sav'
+filename = 'latest-multinomial-naive-bayes.sav'
 filename_vec = 'vectorizer.sav'
 loaded_model = pickle.load(open(filename, 'rb'))
 print("Model Loaded")
@@ -27,8 +27,8 @@ def action_start(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
-Hi apa kabar {} {}? <Nama bot yg bagus> siap menjawab pertanyaanmu mengenai Grave's Disease. 
-Silahkan tanya mengenai informasi penyakit Grave's dengan menggunakan format \"/ask <pertanyaan>\"
+Hi apa kabar {} {}? <Nama bot yg bagus> siap menjawab pertanyaanmu mengenai Graves Disease. 
+Silahkan tanya mengenai informasi penyakit Graves dengan menggunakan format \"/ask <pertanyaan>\"
 '''.format(first_name, last_name))
 
     print(message)
@@ -54,22 +54,12 @@ Berikut adalah list command yang dapat dilakukan
 /ask → Ketik langsung pertanyaan dengan memisahkan /ask dan pertanyaan dengan spasi
 
 Contoh: 
-/ask Apa itu Grave's Disease
+/ask Apa itu Graves Disease
 '''.format(first_name,last_name))
 
 @bot.message_handler(commands=['ask'])
 def action_ask(message):
     
-    # ganti akses db
-    answer_sample = {
-    "0": "Jawaban 0 ayayayaya",
-    "1": "Jawaban 1 ayayayaya",
-    "2": "Jawaban 2 iyiyiyiy",
-    "3": "Jawaban 3 uwuwuwuwu",
-    "4": "Jawaban 4 hohohohoh",
-    "5": "Jawaban 5 lolololol",
-    "6": "Jawaban 6 lalalalala"
-}
     texts = message.text.split(' ')
 
     # Convert question
