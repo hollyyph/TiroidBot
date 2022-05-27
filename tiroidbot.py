@@ -12,12 +12,10 @@ print("Database loaded")
 answers = db['answers']
 
 # load the model from disk
-filename = 'latest-multinomial-naive-bayes.sav'
-filename_vec = 'vectorizer.sav'
-loaded_model = pickle.load(open(filename, 'rb'))
+filename = 'latest-multinomial-naive-bayes-2nd.sav'
+filename_mod = 'joblib-latest-multinom-nb.pkl'
+loaded_model = joblib.load(open(filename_mod, 'rb'))
 print("Model Loaded")
-loaded_vec = pickle.load(open(filename_vec, 'rb'))
-print("Vectorizer Loaded")
 
 api = '5181979829:AAEueTTI3--iCXqnS401FJ1vVaCizkR74M0'
 bot = telebot.TeleBot(api)
@@ -27,7 +25,7 @@ def action_start(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
-Hi apa kabar {} {}? <Nama bot yg bagus> siap menjawab pertanyaanmu mengenai Graves Disease. 
+Hi apa kabar {} {}? Tiroid Help Bot siap menjawab pertanyaanmu mengenai Graves Disease. 
 Silahkan tanya mengenai informasi penyakit Graves dengan menggunakan format \"/ask <pertanyaan>\"
 '''.format(first_name, last_name))
 
@@ -68,10 +66,9 @@ def action_ask(message):
     question_str = question_str.join(question)
 
     # Predict answer based on question
-    question_vec = loaded_vec.transform([question_str])
-    pred = loaded_model.predict(question_vec)
-    pred_category = float(pred[0])
-
+    pred = loaded_model.predict([question_str])
+    pred_category = int(pred[0]*100)
+    
     # Access DB to get answer string based on category
     answers_str = answers.find_one({'category': pred_category})['answer']
     answers_images = answers.find_one({'category': pred_category})['images']
