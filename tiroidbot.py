@@ -67,6 +67,7 @@ def action_ask(message):
     # Predict answer based on question
     pred = loaded_model.predict([question_str])
     pred_category = int(pred[0]*100)
+    print(pred_category)
     
     # Access DB to get answer string based on category
     answers_str = answers.find_one({'category': pred_category})['answer']
