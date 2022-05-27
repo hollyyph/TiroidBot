@@ -1,0 +1,4 @@
+sklearn
+PyTelegramBotAPI
+pymongo[srv]
+joblib
