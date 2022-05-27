@@ -12,7 +12,6 @@ print("Database loaded")
 answers = db['answers']
 
 # load the model from disk
-filename = 'latest-multinomial-naive-bayes-2nd.sav'
 filename_mod = 'joblib-latest-multinom-nb.pkl'
 loaded_model = joblib.load(open(filename_mod, 'rb'))
 print("Model Loaded")
