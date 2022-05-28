@@ -80,8 +80,6 @@ def action_ask(message):
     for image_url in answers_images:
         bot.send_photo(message.chat.id, image_url)
 
-    print(texts)
-    
 print('tiroidbot start running')
 
 bot.polling()
