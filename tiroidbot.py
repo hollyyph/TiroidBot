@@ -75,6 +75,7 @@ def action_ask(message):
     
     # Send answer strings
     for ans in answers_str:
+        # ans = ans.replace(/\\n/g, '<br>\n')
         bot.send_message(message.chat.id, ans)
     # Send answer images
     for image_url in answers_images:
