@@ -16,15 +16,15 @@ filename_mod = 'joblib-latest-multinom-nb.pkl'
 loaded_model = joblib.load(open(filename_mod, 'rb'))
 print("Model Loaded")
 
-api = '5181979829:AAEueTTI3--iCXqnS401FJ1vVaCizkR74M0'
+api = '5356518810:AAEarOTSlNrKJ0zKM35lSsIAGj5IiT7suBs'
 bot = telebot.TeleBot(api)
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['mulai'])
 def action_start(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
-Hi apa kabar {} {}? Tiroid Help Bot siap menjawab pertanyaanmu mengenai Graves Disease. 
+Hi apa kabar {} {}? Tanya si Graves siap menjawab pertanyaanmu mengenai Graves Disease. 
 Silahkan tanya mengenai informasi penyakit Graves dengan menggunakan format \"/ask <pertanyaan>\"
 '''.format(first_name, last_name))
 
@@ -39,22 +39,22 @@ def action_id(message):
 ID Telegram = {}
         '''.format(id_telegram))
 
-@bot.message_handler(commands=['help'])
+@bot.message_handler(commands=['bantuan'])
 def action_help(message):
     first_name = message.chat.first_name
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
 Halo {} {} 👋
 Berikut adalah list command yang dapat dilakukan
-/start → Mulai menggunakan Bot
-/help → Melihat kembali list command Bot
-/ask → Ketik langsung pertanyaan dengan memisahkan /ask dan pertanyaan dengan spasi
+/mulai → Mulai menggunakan Bot
+/bantuan → Melihat kembali list command Bot
+/tanya → Ketik langsung pertanyaan dengan memisahkan /ask dan pertanyaan dengan spasi
 
 Contoh: 
-/ask Apa itu Graves Disease
+/tanya Apa itu Graves Disease
 '''.format(first_name,last_name))
 
-@bot.message_handler(commands=['ask'])
+@bot.message_handler(commands=['tanya'])
 def action_ask(message):
     
     texts = message.text.split(' ')
@@ -81,7 +81,7 @@ def action_ask(message):
     for image_url in answers_images:
         bot.send_photo(message.chat.id, image_url)
 
-print('tiroidbot start running')
+print('tanyagravesbot start running')
 
 bot.polling()
 
