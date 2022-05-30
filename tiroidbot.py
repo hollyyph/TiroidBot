@@ -25,7 +25,7 @@ def action_start(message):
     last_name = message.chat.last_name
     bot.send_message(message.chat.id, '''
 Hi apa kabar {} {}? Tanya si Graves siap menjawab pertanyaanmu mengenai Graves Disease. 
-Silahkan tanya mengenai informasi penyakit Graves dengan menggunakan format \"/ask <pertanyaan>\"
+Silahkan tanya mengenai informasi penyakit Graves dengan menggunakan format \"/tanya <pertanyaan>\"
 '''.format(first_name, last_name))
 
     print(message)
@@ -48,7 +48,7 @@ Halo {} {} 👋
 Berikut adalah list command yang dapat dilakukan
 /mulai → Mulai menggunakan Bot
 /bantuan → Melihat kembali list command Bot
-/tanya → Ketik langsung pertanyaan dengan memisahkan /ask dan pertanyaan dengan spasi
+/tanya → Ketik langsung pertanyaan dengan memisahkan /tanya dan pertanyaan dengan spasi
 
 Contoh: 
 /tanya Apa itu Graves Disease
